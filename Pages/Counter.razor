@@ -1,0 +1,33 @@
+﻿@page "/counter"
+@inject Inventory.Client.Services.StockService StockApi
+@using Inventory.Client.Modelos
+@using System.Text.Json;
+@inject IJSRuntime JS
+@using Inventory.Client.Shared
+
+<PageTitle>Slack Information</PageTitle>
+
+<h3>Slack Info</h3>
+
+@if (data == null)
+{
+    <p>No data yet. Go to the home page first and sycn inventory.</p>
+}
+else
+{
+    <p>Slack sent: @data.slackMessageSent</p>
+    <p>Status: @data.slackMessSent</p>
+<a class="download-btn" href="@data.slackDownloadUrl" target="_blank">
+    <i class="bi bi-file-earmark-arrow-down-fill"></i>Download Slack Log</a>
+        <SlackMessage message="data.slackOutMessage" />
+    <pre>@JsonSerializer.Serialize(data.slackOutMessage, new JsonSerializerOptions { WriteIndented = true })</pre>
+}
+
+@code {
+    ApiResponse? data;
+
+    protected override void OnInitialized()
+    {
+        data = StockApi.LastResponse; // <-- read cached response
+    }
+}

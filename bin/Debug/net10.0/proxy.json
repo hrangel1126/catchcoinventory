@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/proxy",
+  "proxies": {
+    "inventory-api": {
+      "match": "^/api/(.*)$",
+      "rewrite": "/api/$1",
+      "target": "https://catchcoapi20251127143153.azurewebsites.net"
+    }
+  }
+}

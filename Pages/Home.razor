@@ -1,0 +1,199 @@
+﻿@page "/"
+@inject Inventory.Client.Services.StockService StockApi
+@using Inventory.Client.Modelos
+@using System.Text.Json;
+@inject IJSRuntime JS
+
+<PageTitle>Invenotry</PageTitle>
+
+<h3>Inventory Test</h3>
+
+<button class="btn btn-primary" @onclick="CallApi">Manually Get Inventory</button>
+@if (loading)
+{
+    <div class="loading-wrapper">
+        <img src="images/loading.gif" class="loading-gif" />
+        <p>Loading...</p>
+    </div>
+}else if (result != null){
+    <div>
+    <br>
+    <div class="container mt-4">
+ <div class="row g-3">
+        @foreach (var p in result?.data)
+        {
+         <div class="col-md-4 col-sm-6">
+            <div class="product-card shadow-sm hover-card">
+
+                <img src="@p.image" width="150" class="card-img-top" />
+<div class="card-body">
+                <h4>@p?.title</h4>
+
+                <p><b>Available:</b> @p.available</p>
+                <p><b>OnHand:</b> @p.onHand</p>
+                <p><b>Committed:</b> @p.committed</p>
+
+                  @{
+                    //for the  SKU when variant name matches product name 
+                string? mainSku = p.variants.FirstOrDefault(v => v?.product_title == p?.title)?.sku ?? "(none)";
+                }
+                <p><b>Main SKU:</b> @mainSku</p>
+
+              @{
+                //TO chevk real varibals is title od product and name of varian the same is same product
+                //Withouf he tolist was giving error!
+                var realVariants = p.variants.Where(v => v.product_title != p.title).ToList();
+              }
+                @if (realVariants.Any())
+                {
+                    <h5>Variants:</h5>
+                            <ul class="list-group list-group-flush">
+                        @foreach (var v in realVariants)
+                        {
+                            <li class="list-group-item">
+                                        @v.product_title — @v.sku  
+                                        <span class="badge bg-primary ms-2">
+                                            @v.inventory_available
+                                        </span>
+                                    </li>                        }
+                    </ul>
+                }
+
+                @if (p.triggerAlert == true)
+                {
+      <div class="alert-ribbon"> <i class="bi bi-exclamation-triangle-fill"></i> LOW STOCK  </div>  
+                 }
+                  </div>
+                </div>
+            </div>
+        }
+        </div>
+</div>
+        <hr />
+<br>
+        <h4>Raw JSON I get from teh api</h4>
+
+        <pre style="width:800px">@datatoShow</pre>
+    </div>
+}
+
+
+@code {
+    //Myh global variables
+//private string? data;
+  //  @if (datatoShow != null) 
+//{
+ //   <pre>@datatoShow</pre>
+//}
+ bool loading = true;  
+ private string? datatoShow;
+ private List<ProductResponse>? productsDisplay = new();
+ //TO hold my reposne
+ApiResponse? result; 
+      protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("Main component initialized..");
+        await CallApi();
+     
+    }
+
+      protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Just for my sake on some test cause wsa not loading correctly
+            await JS.InvokeVoidAsync("console.log", "Home component rendered");
+        }
+    }
+    private async Task CallApi()
+    {
+        //settign to true in case manual sync
+         loading = true; 
+         //forceRefresh: true to force recall and refresh otehr api consultation
+        result = await StockApi.GetStockAsync(forceRefresh: true);
+        //to sotre my products
+        productsDisplay = new();
+       // productsDisplay = new List<ProductResponse>(); chamnged as crashed
+        //process json
+          datatoShow = JsonSerializer.Serialize(result, new JsonSerializerOptions{WriteIndented = true});
+
+
+    if (result?.data != null)
+    {
+        await JS.InvokeVoidAsync("swalHelper.success", "Inventory Synced!",  "All product data updated.");
+        //Loop all prodcuts reposne  
+        foreach (var p in result.data)
+        {
+          var processed = new ProductResponse
+
+            {
+                title = p.title,
+                image = p.image,
+                available = p.available,
+                onHand = p.onHand,
+                committed = p.committed,
+                stock_risk = p.stock_risk,
+                triggerAlert = p.triggerAlert,
+                variants = new List<VarianttoDisplay>()
+            };
+
+            foreach (var v in p.variants)
+            {
+                //Avoid the varian shown tha tis actually the same prodict if not real variant
+                //filtered by title name
+                bool sameName = v.product_title == p.title;
+
+                if (sameName)
+                {
+                    // Ill use this as the main product SKU
+                    processed.Sku = v.sku;
+                } else
+                {
+                    // no same title or name then is a real variant
+                    processed.variants.Add(new VarianttoDisplay
+                    {
+                        sku = v.sku,
+                        product_title = v.product_title,
+                        inventory_available = v.inventory_available
+                    });
+                }
+            }
+
+            productsDisplay.Add(processed);
+        }
+        
+
+    }
+    if (result?.slackMessageSent == true)
+{
+    //To check hoe many have the trigger alert true, meaning they are low stock
+    var lowList = result.data.Where(p => p.triggerAlert == true).Select(p => $"{p.title} - Available: {p.available}").ToList();
+    int count = lowList.Count;
+
+    string htmlMessage = count == 0 ? "No low stock items." : $"{string.Join("<br>", lowList)}<br><br><b>Check the low stock notice in the top-right corner.</b>";
+
+    await JS.InvokeVoidAsync("Swal.fire", new
+    {
+        title = $"Low Stock Alert.. {count} items",
+        html = htmlMessage,
+        icon = count > 0 ? "warning" : "info",
+        confirmButtonText = "OK"
+    });
+    
+}
+       loading = false;
+        Console.WriteLine("API call Completed");
+           StateHasChanged();
+}
+//To show alert if low stock detected
+private async Task ShowLowStockAlert(ProductResponse p)
+{
+    await JS.InvokeVoidAsync(
+        "swalHelper.warning",
+        "Stock Alert!",
+        $"{p.title} has critical low inventory."
+    );
+}
+
+
+}

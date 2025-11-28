@@ -1,0 +1,71 @@
+.slack-wrapper {
+    max-width: 700px;
+    margin: 15px auto;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.slack-header {
+    font-size: 14px;
+    color: #555;
+}
+
+.slack-header .emoji {
+    margin-right: 5px;
+}
+
+.slack-header .channel {
+    color: #999;
+    margin-left: 10px;
+}
+
+.slack-card {
+    background: #f8f8f8;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.slack-title {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.slack-body {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.slack-thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    float: right;
+    margin-left: 10px;
+    object-fit: cover;
+}
+
+.slack-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.slack-field-title {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.slack-field-value {
+    font-size: 13px;
+}
+
+.slack-footer {
+    font-size: 12px;
+    color: #777;
+    margin-top: 12px;
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+}

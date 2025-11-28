@@ -1,0 +1,56 @@
+@using Inventory.Client.Modelos
+
+@if (message != null)
+{
+    <div class="slack-wrapper">
+
+        <div class="slack-header">
+            <span class="emoji">@message.icon_emoji</span>
+            <strong>@message.username</strong>
+            <span class="channel">@message.channel</span>
+        </div>
+
+        <div class="slack-text" style="margin-top:5px;">
+            @((MarkupString)message.text.Replace("\n", "<br>"))
+        </div>
+
+        @if (message.attachments != null)
+        {
+            @foreach (var a in message.attachments)
+            {
+                @foreach (var att in a.attachments)
+                {
+                    <div class="slack-card" style="border-left: 4px solid @att.color;">
+
+                        <div class="slack-title">@att.title</div>
+
+                        <div class="slack-body">
+                            @((MarkupString)att.text.Replace("\n", "<br>"))
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(att.thumb_url))
+                        {
+                            <img class="slack-thumb" src="@att.thumb_url" />
+                        }
+
+                        <div class="slack-fields">
+                            @foreach (var f in att.fields)
+                            {
+                                <div class="slack-field">
+                                    <div class="slack-field-title">@f.title</div>
+                                    <div class="slack-field-value">@f.value</div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="slack-footer">@att.footer</div>
+                    </div>
+                }
+            }
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public SlackOutMessage? message { get; set; }
+}

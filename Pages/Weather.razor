@@ -1,0 +1,112 @@
+﻿@page "/weather"
+<div class="project-summary">
+    <h2>Inventory Monitor for CatchCo Technical Summary</h2>
+
+    <div class="summary-card">
+        <h3>Overview</h3>
+        <p>
+            This module connects to our Azure Function API that monitors inventory for a Shopify store we help a friend manage.
+            Instead of building a full Shopify store from scratch, I used and existing Shopify store fomr a friend I helped setup, thissaved a lot of development time.
+            AS I use a real Shopify store, real products, I had to create in teh backedn endpoint api a random funciotn to set some products as los Stock, but calculations are 
+            real, only at end I select 2 or 3 products and make sure are low stock for the teat purposes.
+            Every time you click MAnualy get invenmtory it will generate low stocks for test purposes.
+        </p>
+    </div>
+
+    <div class="summary-card">
+        <h3> API Integration (Azure Functions)</h3>
+        <p>
+            I created custom endpoints in Azure Functions, including a test endpoint, and consumed them using Blazor WebAssembly.
+            The API returns a full JSON payload with stock metrics, variants, and Slack alert data.
+            I bileve most of caculation when possible need to be done in backend to have better user exerience.
+        </p>
+        <ul>
+            <li>HTTP GET request via <code>HttpClient</code></li>
+            <li>Strongly typed response using models</li>
+            <li>Error handling with SweetAlert2</li>
+            <li>Processed variants to avoid duplicate product names</li>
+        </ul>
+    </div>
+
+    <div class="summary-card">
+        <h3> Models & Data Processing</h3>
+        <p>
+            To avoid working with raw JSON, I created clean C# models for:
+        </p>
+        <ul>
+            <li><code>ApiResponse</code></li>
+            <li><code>ProductResponse</code></li>
+            <li><code>VariantDisplay</code></li>
+            <li><code>SlackOutMessage</code> and attachments</li>
+        </ul>
+        <p>
+            These models let me restructure the data:
+        </p>
+        <ul>
+            <li>Identify the main SKU</li>
+            <li>Filter real variants</li>
+            <li>Detect low stock (triggerAlert)</li>
+            <li>Pass Slack messages to another page without re-calling the API</li>
+        </ul>
+    </div>
+
+    <div class="summary-card">
+        <h3>SweetAlert2 Integration</h3>
+        <p>
+            I installed SweetAlert2 manually, wrote a small JavaScript helper
+            (<code>alerts.js</code>), and invoked it from C# using <code>IJSRuntime</code>.  
+            This is used to show notifications such as low inventory warnings.
+        </p>
+    </div>
+
+    <div class="summary-card">
+        <h3> UI & Styling</h3>
+        <p>
+            I used Bootstrap for layout and created custom SCSS components for:
+        </p>
+        <ul>
+            <li>Product cards with hover effects</li>
+            <li>Slack message viewer</li>
+            <li>Download button for Slack logs</li>
+            <li>Loading animation</li>
+        </ul>
+    </div>
+
+    <div class="summary-card">
+        <h3>Development Challenges</h3>
+        <p>
+            Visual Studio 2026 Insiders/Preview would not build or run the project correctly.
+            I had to switch to terminal tools:
+        </p>
+        <ul>
+            <li><code>dotnet build</code></li>
+            <li><code>dotnet run</code></li>
+            <li>PowerShell for cleaning and restoring packages</li>
+        </ul>
+        <p>
+            After switching to CLI, everything worked perfectly.
+        </p>
+    </div>
+
+    <div class="summary-card">
+        <h3>Caching the Response (Saving API Calls)</h3>
+        <p>
+            To avoid calling the API multiple times, I stored the latest response inside the
+            <code>StockService</code> and reused it on the Slack alerts page.
+        </p>
+    </div>
+
+    <div class="summary-card important">
+        <h3>Final Result</h3>
+        <p>
+            A complete client/side dashboard that:
+        </p>
+        <ul>
+            <li>Loads inventory from Azure</li>
+            <li>Detects low stock</li>
+            <li>Renders Shopify product data</li>
+            <li>Displays Slack like alert messages</li>
+            <li>Uses caching, models, Bootstrap, SCSS, and SweetAlert2</li>
+        </ul>
+    </div>
+</div>

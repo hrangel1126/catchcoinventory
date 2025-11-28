@@ -1,0 +1,6 @@
+C:\Users\hebe8671\source\repos\Inventory\Inventory.Client\bin\Release\net10.0\publish\wwwroot\index.html
+C:\Users\hebe8671\source\repos\Inventory\Inventory.Client\bin\Release\net10.0\publish\proxy.json
+C:\Users\hebe8671\source\repos\Inventory\Inventory.Client\bin\Release\net10.0\publish\swa-cli.config.json
+C:\Users\hebe8671\source\repos\Inventory\Inventory.Client\bin\Release\net10.0\publish\Inventory.Client.runtimeconfig.json
+C:\Users\hebe8671\source\repos\Inventory\Inventory.Client\bin\Release\net10.0\publish\dotnet.js
+C:\Users\hebe8671\source\repos\Inventory\Inventory.Client\bin\Release\net10.0\publish\web.config
