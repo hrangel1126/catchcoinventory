@@ -10,6 +10,9 @@ namespace Inventory.Client.Modelos
     public string? slackMessSent { get; set; }
     public string? slackDownloadUrl { get; set; }
     public SlackOutMessage? slackOutMessage { get; set; }
+    public List<string>? Logictlogictrace { get; set; }
+    public string? LogDownloadUrl { get; set; }
+
 }
    public class ProductResponse
 {

@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "Inventory.Client",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-sMdYRlN+zZMlioVEzmPqk3lfRgSci9B5QJwTb2uV7EI=",
+    "hash": "sha256-NG22HykgNbAKkscfXugqE5nvZSrUxZSo1DVhEPEM1yQ=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.xanz2e7ksm.js"
@@ -1039,15 +1039,15 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "Inventory.Client.wasm",
-        "name": "Inventory.Client.co1o4wz6dc.wasm",
-        "integrity": "sha256-fNLtg37khuY73PexY2cLTjVPlpLWQJPEe6v1TPlwerY="
+        "name": "Inventory.Client.gagavgnaev.wasm",
+        "integrity": "sha256-COCwX8MuBo7p5VmhTLkHhVBP3/GATr4WJGSLaf1/Dpg="
       }
     ],
     "pdb": [
       {
         "virtualPath": "Inventory.Client.pdb",
-        "name": "Inventory.Client.5w30zldy2l.pdb",
-        "integrity": "sha256-SyVhp+KJIQWDnmiABqdH6Kb+CbOAWIkbhLfwMJkQv2I="
+        "name": "Inventory.Client.z6jzwo1sc2.pdb",
+        "integrity": "sha256-FSSR0jYfpa7z+B6tJDQW6RDYI/+sZ36z3xJFzo2UdMU="
       }
     ],
     "libraryInitializers": [

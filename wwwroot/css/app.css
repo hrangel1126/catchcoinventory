@@ -206,3 +206,18 @@ code {
   width: 600px; 
   overflow-x: auto; 
 }
+.log-box {
+    background: #1e1e1e;
+    color: #dcdcdc;
+    padding: 15px;
+    border-radius: 6px;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.log-line {
+    padding: 2px 0;
+    border-bottom: 1px solid #333333;
+}
